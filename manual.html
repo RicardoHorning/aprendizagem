@@ -1,90 +1,328 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual Pedagógico e de Operação - Simulador Empresarial</title>
-  <style>
-    :root {
-      --primary: #1e3a8a;
-      --secondary: #0284c7;
-      --text: #334155;
-      --bg: #f8fafc;
-      --border: #e2e8f0;
-    }
-    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: var(--text); background-color: var(--bg); padding: 30px; max-width: 1000px; margin: 0 auto; }
-    h1 { color: var(--primary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
-    h2 { color: var(--secondary); margin-top: 30px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-    h3 { color: var(--primary); margin-top: 20px; }
-    .box-info { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin: 20px 0; border-radius: 0 6px 6px 0; }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-    th, td { border: 1px solid var(--border); padding: 12px; text-align: left; }
-    th { background-color: #f1f5f9; color: var(--primary); }
-    ul, ol { padding-left: 20px; }
-    li { margin-bottom: 8px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Técnico e Operacional — SPAE v3.0</title>
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --panel-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --accent-yellow: #facc15;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --code-bg: #0f172a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--accent-blue); display: flex; align-items: center; gap: 10px; }
+        .version-badge { background: var(--accent-purple); color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+
+        .layout-container { display: flex; flex: 1; max-width: 1600px; margin: 0 auto; width: 100%; }
+
+        aside {
+            width: 280px;
+            background: #0f172a;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+        }
+
+        aside h3 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.8rem; letter-spacing: 0.05em; }
+        aside ul { list-style: none; }
+        aside li { margin-bottom: 0.4rem; }
+        aside a { color: var(--text-light); text-decoration: none; font-size: 0.88rem; display: block; padding: 0.4rem 0.6rem; border-radius: 6px; transition: all 0.2s; }
+        aside a:hover { background: var(--panel-bg); color: var(--accent-blue); }
+
+        main { flex: 1; padding: 2rem; overflow-y: auto; }
+
+        section { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 2rem; margin-bottom: 2rem; }
+        h1 { color: var(--accent-blue); font-size: 2rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent-blue); font-size: 1.4rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 1rem; margin-bottom: 1rem; }
+        h3 { color: var(--accent-yellow); font-size: 1.1rem; margin-top: 1.2rem; margin-bottom: 0.6rem; }
+        p { margin-bottom: 1rem; color: #cbd5e1; font-size: 0.95rem; }
+
+        ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #cbd5e1; font-size: 0.95rem; }
+        li { margin-bottom: 0.4rem; }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1.2rem 0;
+            font-size: 0.9rem;
+        }
+        .callout-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left-color: var(--accent-orange);
+            color: #fef08a;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.88rem; }
+        th, td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; }
+        th { background: #0f172a; color: var(--accent-blue); }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+        code { background: var(--code-bg); color: var(--accent-green); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.88rem; }
+        pre { background: var(--code-bg); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); overflow-x: auto; font-family: monospace; font-size: 0.85rem; color: #e2e8f0; margin: 1rem 0; }
+
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+        .badge-blue { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+        .badge-green { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .badge-purple { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+
+        footer { background: #0f172a; border-top: 1px solid var(--border-color); text-align: center; padding: 1.5rem; font-size: 0.85rem; color: var(--text-muted); }
+    </style>
 </head>
 <body>
 
-  <h1>📘 Manual Pedagógico e de Operação do Simulador</h1>
-  <p>Este documento contém as orientações técnicas e metodológicas para professores e instrutores utilizarem o Simulador de Gestão Empresarial no ambiente de aprendizagem.</p>
+    <header>
+        <div class="logo">
+            ⚡ MANUAL TÉCNICO SPAE <span class="version-badge">v3.0 ENGINE</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">
+            Simulador de Práticas Administrativas Empresariais
+        </div>
+    </header>
 
-  <div class="box-info">
-    <strong>Objetivo do Sistema:</strong> Desenvolver competências profissionais por meio da resolução de problemas e tomada de decisões em cenários empresariais simulados.
-  </div>
+    <div class="layout-container">
+        <aside>
+            <h3>Índice do Manual</h3>
+            <ul>
+                <li><a href="#overview">1. Visão Geral & Arquitetura</a></li>
+                <li><a href="#hud-gps">2. Painel HUD & Guia GPS</a></li>
+                <li><a href="#mod-agency">3. Módulo 0: Agência RH</a></li>
+                <li><a href="#mod-prof">4. Módulo 1: Mercado & Projetos UC</a></li>
+                <li><a href="#mod-hr">5. Módulo 2: Setup RH & Equipas</a></li>
+                <li><a href="#mod-workflow">6. Módulos 3-7: Fluxo Operacional ERP</a></li>
+                <li><a href="#tech-specs">7. Especificações Técnicas</a></li>
+                <li><a href="#github-deploy">8. Publicação no GitHub Pages</a></li>
+            </ul>
+        </aside>
 
-  <h2>1. Orientação de Operação para o Docente</h2>
-  <ol>
-    <li><strong>Seleção do Setor da Empresa:</strong> No topo da página principal (`index.html`), utilize o menu de seleção para definir o segmento da turma (Varejo, Indústria ou Logística).</li>
-    <li><strong>Seleção da Unidade Curricular:</strong> Escolha a UC que deseja trabalhar na sessão de aula.</li>
-    <li><strong>Instrução aos Alunos:</strong> Oriente os estudantes a realizarem a leitura do chamado gerencial e efetuarem o tratamento dos dados na tabela antes do envio do relatório final.</li>
-  </ol>
+        <main>
+            <section id="overview">
+                <h1>1. Visão Geral & Arquitetura do Sistema</h1>
+                <p>O <strong>SPAE v3.0 (Simulador de Práticas Administrativas Empresariais)</strong> é um motor de simulação empresarial concebido para ambientes formativos e académicos[cite: 3]. O sistema reproduz a dinâmica operacional de uma empresa industrial/comercial integrando gestão de recursos humanos, compras, produção, controlo de qualidade e liquidação financeira[cite: 3].</p>
 
-  <h2>2. Unidade Curricular: Tratamento e Gerenciamento de Dados Quantitativos</h2>
-  <p><strong>Carga Horária Recomendada:</strong> 60 Horas</p>
-  <p><strong>Perfil do Desafio:</strong> Operacional e Analítico</p>
+                <div class="callout">
+                    <strong>Sincronização em Tempo Real:</strong> A arquitetura da versão 3.0 opera sobre o protocolo <code>BroadcastChannel API</code> (canal <code>VERTICE_ERP_ENGINE_2026</code>)[cite: 3]. Isto permite sincronização instantânea de estado entre múltiplos ecrãs e abas do navegador sem dependência de servidores externos[cite: 3].
+                </div>
 
-  <h3>Indicadores de Desempenho (Critérios de Avaliação)</h3>
-  <ul>
-    <li><strong>ID1 (Higienização de Dados):</strong> Identifica e remove inconsistências, registros duplicados e valores nulos na base de dados brutos do sistema ERP.</li>
-    <li><strong>ID2 (Análise Estatística Aplicada):</strong> Calcula corretamente a média descritiva e os indicadores quantitativos exigidos pela gerência.</li>
-    <li><strong>ID3 (Tomada de Decisão):</strong> Elabora o relatório operacional com precisão e sem erros de auditoria interna.</li>
-  </ul>
+                <h3>Principais Inovações da Versão 3.0</h3>
+                <ul>
+                    <li><strong>Gerador Dinâmico de Projetos por Unidade Curricular (UC):</strong> Integração direta com a matriz curricular do SENAI (SST, Qualidade, Logística, Dados Quantitativos, etc.)[cite: 3].</li>
+                    <li><strong>Guia GPS Luminoso Integrado:</strong> Orientação contextual interativa com efeitos visuais dinâmicos para conduzir o utilizador nos fluxos operacionais[cite: 3].</li>
+                    <li><strong>Quiz de Triagem L/P/C:</strong> Mapeamento de perfis comportamentais (Liderança, Processos, Mediação) na inscrição de formandos[cite: 3].</li>
+                    <li><strong>Módulo Extra UC 01 (80h):</strong> Suporte avançado para Tratamento e Gerenciamento de Dados Quantitativos[cite: 3].</li>
+                </ul>
+            </section>
 
-  <h3>Matriz Pedagógica por Setor Empresarial</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Setor Configurado</th>
-        <th>Origem dos Dados</th>
-        <th>Atividade Prática do Aluno</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Varejo / Comércio</strong></td>
-        <td>Histórico de vendas por filial e status de pagamento.</td>
-        <td>Remoção de faturamentos duplicados e cálculo da média real de vendas válidas.</td>
-      </tr>
-      <tr>
-        <td><strong>Indústria / Manufatura</strong></td>
-        <td>Inspeção de lotes e registro de peças com defeito.</td>
-        <td>Tratamento de ruídos na leitura e média de refugo no processo produtivo.</td>
-      </tr>
-      <tr>
-        <td><strong>Logística / Serviços</strong></td>
-        <td>Consumo de combustível da frota e rotas de entrega.</td>
-        <td>Eliminação de duplicidades no rastreamento e cálculo da média de consumo por veículo.</td>
-      </tr>
-    </tbody>
-  </table>
+            <section id="hud-gps">
+                <h1>2. Painel HUD & Guia GPS do Sistema</h1>
+                <p>A barra superior do SPAE v3.0 apresenta métricas em tempo real (HUD Dashboard) que monitorizam a saúde financeira e operacional da organização simulada[cite: 3]:</p>
 
-  <h2>3. Sistema de Avaliação do Simulador</h2>
-  <p>O algoritmo do simulador valida automaticamente duas camadas de execução do aluno:</p>
-  <ol>
-    <li><strong>Ação Prática na Tabela:</strong> Verifica se as linhas inconsistentes ou duplicadas foram efetivamente selecionadas e deletadas da interface.</li>
-    <li><strong>Exatidão Numérica:</strong> Confronta os valores digitados nos campos de resposta com o gabarito estatístico gerado para a base de dados ativa.</li>
-  </ol>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Indicador HUD</th>
+                            <th>Descrição Operacional</th>
+                            <th>Impacto no Sistema</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Caixa Empresa</code></td>
+                            <td>Saldo financeiro disponível em liquidez imediata[cite: 3].</td>
+                            <td>Debita em compras de stock/projetos e credita no faturamento[cite: 3].</td>
+                        </tr>
+                        <tr>
+                            <td><code>Estoque Insumos</code></td>
+                            <td>Quantidade de matérias-primas no almoxarifado[cite: 3].</td>
+                            <td>Necessário para suprir a ordem de produção do setor fabril[cite: 3].</td>
+                        </tr>
+                        <tr>
+                            <td><code>Índice SLA</code></td>
+                            <td>Nível de serviço e cumprimento de prazos[cite: 3].</td>
+                            <td>Avalia a eficiência do fluxo operacional[cite: 3].</td>
+                        </tr>
+                        <tr>
+                            <td><code>Gargalos Ativos</code></td>
+                            <td>Projetos ou ordens retidas em setores específicos[cite: 3].</td>
+                            <td>Sinaliza travamentos na cadeia de valor[cite: 3].</td>
+                        </tr>
+                        <tr>
+                            <td><code>Turma</code></td>
+                            <td>Total de formandos inscritos e homologados no sistema[cite: 3].</td>
+                            <td>Controla a capacidade do quadro funcional[cite: 3].</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Guia do Sistema (GPS Banner)</h3>
+                <p>O banner dinâmico <code>#gpsBanner</code> analisa a fase atual da simulação e destaca os botões de ação necessários com o efeito <code>btn-active-glow</code> (animação luminosa em ciclo continuo amarelo/verde), guiando formandos e formadores em cada etapa do processo[cite: 3].</p>
+            </section>
+
+            <section id="mod-agency">
+                <h1>3. Módulo 0: Agência de RH e Inscrição</h1>
+                <p>A porta de entrada dos formandos na simulação realiza a recolha de dados pessoais, preferência de cargo e triagem comportamental[cite: 3].</p>
+
+                <div class="callout callout-warning">
+                    <strong>Aviso de Mobilidade Organizacional:</strong> Ao inscrever-se, o formando toma ciência de que a candidatura serve de base para avaliação, podendo ser alocado ou promovido para qualquer setor de acordo com as necessidades operacionais da empresa simulada[cite: 3].
+                </div>
+
+                <h3>Cargos Disponíveis e Estrutura Remuneratória</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nível / Setor</th>
+                            <th>Cargo</th>
+                            <th>Remuneração Base</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-purple">Gestão</span></td>
+                            <td>Diretor / Gerente Geral</td>
+                            <td>R$ 14.500,00[cite: 3]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-blue">Supervisão</span></td>
+                            <td>Supervisor(a) de RH / Financeiro / Suprimentos</td>
+                            <td>R$ 9.800,00[cite: 3]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-green">Nível III</span></td>
+                            <td>Assistente Admin. III (Folha / Contas / Cotações)</td>
+                            <td>R$ 6.500,00[cite: 3]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-green">Nível II</span></td>
+                            <td>Assistente Admin. II (Recrutamento / Conciliação / Estoque)</td>
+                            <td>R$ 4.500,00[cite: 3]</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-green">Nível I</span></td>
+                            <td>Assistente Admin. I (Ponto / Faturamento / Recebimento)</td>
+                            <td>R$ 3.200,00[cite: 3]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="mod-prof">
+                <h1>4. Módulo 1: Painel do Mercado & Projetos UC</h1>
+                <p>Reservado ao formador, este painel permite parametrizar a simulação e disparar <strong>Projetos Especiais por Unidade Curricular (UC)</strong>[cite: 3].</p>
+
+                <h3>Unidades Curriculares Mapeadas</h3>
+                <ul>
+                    <li><strong>UC 03 — Saúde e Segurança do Trabalho (20h):</strong> Adequação emergencial da fábrica às NRs[cite: 3].</li>
+                    <li><strong>UC 10 — Rotinas de Apoio Admin. à Área de RH (40h):</strong> Descrição de cargos e integração de equipas[cite: 3].</li>
+                    <li><strong>UC 14 — Gestão da Qualidade (40h):</strong> Trata não-conformidades e certificação de linha[cite: 3].</li>
+                    <li><strong>UC 18 — Logística Integrada (120h):</strong> Gestão do almoxarifado e curva ABC de stock[cite: 3].</li>
+                    <li><strong>UC 12 — Rotinas Contábeis e Financeiras (40h):</strong> Auditoria de fluxo de caixa e renegociação de prazos[cite: 3].</li>
+                    <li><strong>UC EXTRA 01 — Tratamento e Gerenciamento de Dados Quantitativos (80h):</strong> Análise estatística de indicadores, desvio padrão, cartas de controlo e higienização quantitativa de dados[cite: 3].</li>
+                </ul>
+            </section>
+
+            <section id="mod-hr">
+                <h1>5. Módulo 2: Setup de RH & Quadro de Pessoal</h1>
+                <p>Permite ao formador e à equipa de RH revisar os candidatos inscritos na Agência, analisar a pontuação do quiz (Liderança, Processos, Mediação) e homologar a alocação dos colaboradores na tabela ativa de funcionários[cite: 3].</p>
+            </section>
+
+            <section id="mod-workflow">
+                <h1>6. Módulos 3 a 7: Fluxo Operacional ERP</h1>
+                <p>A execução dos Projetos Especiais e Ordens de Produção segue uma cadeia sequencial rigorosa[cite: 3]:</p>
+
+                <pre>
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│ 3. Gerência Geral│ ──> │4. Compras/Suprim.│ ──> │ 5. Produção/Oper.│
+└──────────────────┘     └──────────────────┘     └──────────────────┘
+                                                           │
+                                                           ▼
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  Projeto Concluído│ <── │ 7. Financeiro    │ <── │ 6. Qualidade/SLA │
+└──────────────────┘     └──────────────────┘     └──────────────────┘
+                </pre>
+
+                <ol>
+                    <li><strong>3. Gerência Geral:</strong> Recebe o projeto gerado, analisa o cenário e aprova o plano de ação libertando orçamento[cite: 3].</li>
+                    <li><strong>4. Compras & Logística:</strong> Executa cotações, adquire lotes de matérias-primas e liberta suprimentos para a linha[cite: 3].</li>
+                    <li><strong>5. Operação & Produção:</strong> Valida o consumo de insumos no estoque e executa as tarefas operacionais[cite: 3].</li>
+                    <li><strong>6. Qualidade & SLA:</strong> Inspeciona as entregas, afere o cumprimento das normas e emite o laudo de conformidade[cite: 3].</li>
+                    <li><strong>7. Financeiro & Faturamento:</strong> Realiza a liquidação da ordem no caixa, faturando o valor do projeto[cite: 3].</li>
+                </ol>
+            </section>
+
+            <section id="tech-specs">
+                <h1>7. Especificações Técnicas & Eventos</h1>
+                <p>Estrutura dos objetos de estado manipulados no motor JavaScript[cite: 3]:</p>
+
+                <pre><code>// Estrutura do Estado Global
+let state = {
+    phase: 'RH_ONBOARDING', // 'RH_ONBOARDING' | 'DRAFTING' | 'OPERATIONAL'
+    round: 0,
+    cash: 100000.00,
+    inventory: 10,
+    sla: 100,
+    bottlenecks: 0,
+    candidates: [],
+    employees: [],
+    orders: [],
+    logs: [],
+    currentProject: null
+};
+
+// Canal de Comunicação BroadcastChannel
+const channel = new BroadcastChannel('VERTICE_ERP_ENGINE_2026');
+</code></pre>
+            </section>
+
+            <section id="github-deploy">
+                <h1>8. Guia de Publicação no GitHub Pages</h1>
+                <p>Para publicar a solução SPAE v3.0 completa no GitHub Pages, siga o procedimento abaixo:</p>
+
+                <ol>
+                    <li>Crie um repositório no GitHub (exemplo: <code>spae-v3-simulator</code>).</li>
+                    <li>Adicione o ficheiro principal da simulação como <code>index.html</code> (utilize o código fonte do SPAE v3.0)[cite: 3].</li>
+                    <li>Guarde este manual técnico como <code>manual.html</code> no mesmo diretório raiz[cite: 3].</li>
+                    <li>Efetue o commit e push dos ficheiros para a ramificação principal (<code>main</code> ou <code>master</code>).</li>
+                    <li>Aceda às definições do repositório (<strong>Settings > Pages</strong>).</li>
+                    <li>Em <strong>Build and deployment</strong>, escolha a fonte como <code>Deploy from a branch</code> e selecione a branch <code>main</code> / pasta <code>/ (root)</code>.</li>
+                    <li>Após alguns instantes, o manual e a aplicação estarão disponíveis no link público disponibilizado pelo GitHub Pages.</li>
+                </ol>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        SPAE v3.0 — Simulador de Práticas Administrativas Empresariais | Documentação para Repositórios GitHub[cite: 3]
+    </footer>
 
 </body>
 </html>
