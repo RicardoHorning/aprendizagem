@@ -143,28 +143,13 @@
         .pill-green { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
         .pill-blue { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
 
-        /* AVISO E CARD DE DETALHES DA VAGA */
         .notice-box {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid var(--accent-orange);
-            border-left: 4px solid var(--accent-orange);
-            padding: 0.8rem;
-            border-radius: 6px;
-            font-size: 0.82rem;
-            color: #fef08a;
-            margin-bottom: 1rem;
-            line-height: 1.4;
+            background: rgba(245, 158, 11, 0.15); border: 1px solid var(--accent-orange); border-left: 4px solid var(--accent-orange); padding: 0.8rem; border-radius: 6px; font-size: 0.82rem; color: #fef08a; margin-bottom: 1rem; line-height: 1.4;
         }
 
-        .job-detail-card {
-            background: #0f172a;
-            border: 1px solid var(--accent-blue);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 0.5rem;
-        }
-
+        .job-detail-card { background: #0f172a; border: 1px solid var(--accent-blue); border-radius: 8px; padding: 1rem; margin-top: 0.5rem; }
         .manual-card { background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.2rem; margin-bottom: 1rem; }
+        .uc-project-box { background: #0f172a; border: 1px solid var(--accent-purple); border-radius: 8px; padding: 1rem; margin-top: 1rem; }
     </style>
 </head>
 <body>
@@ -202,7 +187,7 @@
 
     <nav>
         <button id="nav-agency" class="nav-btn active" onclick="switchTab('tab-agency')">💼 0. Agência RH (Inscrição)</button>
-        <button id="nav-prof" class="nav-btn" onclick="switchTab('tab-prof')">🎛️ 1. Mercado (Professor)</button>
+        <button id="nav-prof" class="nav-btn" onclick="switchTab('tab-prof')">🎛️ 1. Mercado & Projetos UCs (Professor)</button>
         <button id="nav-hr" class="nav-btn" onclick="switchTab('tab-hr')">👔 2. Setup RH & Equipes</button>
         <button id="nav-manager" class="nav-btn" onclick="switchTab('tab-manager')">📋 3. Gerência Geral</button>
         <button id="nav-supply" class="nav-btn" onclick="switchTab('tab-supply')">📦 4. Compras & Logística</button>
@@ -214,7 +199,7 @@
 
     <main>
 
-        <!-- 0. AGÊNCIA DE RH / INSCRIÇÃO DO ALUNO -->
+        <!-- 0. AGÊNCIA DE RH -->
         <section id="tab-agency" class="panel active">
             <h2>💼 Agência de RH — Inscrição do Aluno & Seleção de Perfil</h2>
             
@@ -301,50 +286,95 @@
 
                 <div>
                     <h3>📌 Detalhes da Vaga Selecionada</h3>
-                    <div id="jobPreviewContainer">
-                        <!-- Preenchido via JS conforme vaga selecionada -->
-                    </div>
+                    <div id="jobPreviewContainer"></div>
                 </div>
             </div>
         </section>
 
-        <!-- 1. CONTROLE DO PROFESSOR -->
+        <!-- 1. CONTROLE DO PROFESSOR & GERADOR DE PROJETOS POR UC -->
         <section id="tab-prof" class="panel">
-            <h2>🎛️ Painel do Mercado & Triagem (Professor)</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Dispare demandas, aprove os líderes e conduza a dinâmica da turma.</p>
+            <h2>🎛️ Painel do Mercado & Gerador de Projetos Especiais por UC</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Crie e lance desafios temáticos integrados para as 18 Unidades Curriculares da matriz do SENAI.</p>
 
             <div class="grid-2">
                 <div>
-                    <h3>👥 Candidatos Inscritos & Triagem de Liderança</h3>
-                    <div style="background:#0f172a; padding:0.8rem; border-radius:6px; margin-bottom:1rem; border:1px solid var(--border-color); max-height:220px; overflow-y:auto;">
-                        <div id="teacherScreeningList">
-                            <div style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum aluno inscrito no portal ainda.</div>
+                    <h3>🛠️ Gerador Dinâmico de Projetos Especiais</h3>
+                    <div style="background:#0f172a; padding:1rem; border-radius:8px; border:1px solid var(--accent-purple); margin-top:0.5rem;">
+                        <div class="form-group">
+                            <label>Unidade Curricular (UC) da Matriz APBG005701/02 *</label>
+                            <select id="projUcSelect" onchange="loadUcTemplate()">
+                                <option value="SST">UC 03: Saúde e Segurança do Trabalho (20h)</option>
+                                <option value="RH_ROTINAS">UC 10: Rotinas de Apoio Admin. à Área de RH (40h)</option>
+                                <option value="QUALIDADE">UC 14: Gestão da Qualidade (40h)</option>
+                                <option value="LOGISTICA">UC 18: Logística Integrada (Armazenagem e Expedição) (120h)</option>
+                                <option value="FINANCEIRO_UC">UC 12: Rotinas de Apoio Contábil e Financeiro (40h)</option>
+                                <option value="COMUNICACAO">UC 02: Fundamentos da Comunicacao e Informacao (20h)</option>
+                                <option value="TRANSF_DIGITAL">UC 05: Transformacao Digital no Setor Industrial (20h)</option>
+                                <option value="FERRAMENTAS_QUAL">UC 15: Ferramentas da Qualidade (40h)</option>
+                                <option value="MELHORIA">UC 16: Desenvolvimento de Acoes de Melhoria (40h)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Título / Tema do Projeto Especial</label>
+                            <input type="text" id="projTitle" placeholder="Ex: Adequação Emergencial da Planta às NRs">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cenário / Desafio Proposto aos Alunos</label>
+                            <textarea id="projScenario" rows="3" placeholder="Descreva a situação-problema real que a empresa simulada precisa resolver..."></textarea>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem;">
+                            <div class="form-group">
+                                <label>Orçamento Aprovado (R$)</label>
+                                <input type="number" id="projBudget" value="15000">
+                            </div>
+                            <div class="form-group">
+                                <label>Prazo de Execução (Rodadas)</label>
+                                <input type="number" id="projRounds" value="2">
+                            </div>
+                        </div>
+
+                        <button id="btnGeneratePreview" class="btn btn-orange" style="width:100%; margin-top:0.3rem;" onclick="generateProjectPreview()">🪄 Gerar Prévia do Projeto Especial</button>
+                    </div>
+
+                    <!-- BOX DE PRÉVIA E REFINAMENTO DO PROFESSOR -->
+                    <div id="projectPreviewBox" class="uc-project-box" style="display:none;">
+                        <h4 style="color:var(--accent-yellow); margin-bottom:0.5rem;">📋 Prévia das Tarefas Geradas por Setor:</h4>
+                        <div id="projTasksPreviewText" style="font-size:0.82rem; color:var(--text-muted); line-height:1.5;"></div>
+
+                        <div class="form-group" style="margin-top:1rem;">
+                            <label>💡 Adicionar Ideias / Exigências Adicionais do Professor</label>
+                            <input type="text" id="projCustomIdea" placeholder="Ex: Exigir cotação formal de pelo menos 2 fornecedores no Setor de Compras.">
+                        </div>
+                        <button class="btn btn-orange" style="padding:4px 10px; font-size:0.75rem; margin-bottom:0.8rem;" onclick="addIdeaToProject()">➕ Inserir Exigência no Projeto</button>
+
+                        <div style="display:flex; gap:8px;">
+                            <button id="btnApproveProject" class="btn btn-success" style="flex:1; justify-content:center;" onclick="publishSpecialProject()">🚀 Aprovar e Disparar Projeto para a Turma</button>
                         </div>
                     </div>
 
-                    <h3>🚀 Controle do Ciclo de Aula</h3>
+                    <h3 style="margin-top:1.5rem;">🚀 Controle Geral da Simulação</h3>
                     <div style="display: flex; gap: 8px; margin-top: 0.5rem; flex-wrap:wrap;">
                         <button id="btnStartGamePhase" class="btn btn-success" onclick="startOperationalGame()">🚀 Iniciar Operação (Rodada 1)</button>
                         <button id="btnAdvanceRound" class="btn btn-orange" onclick="advanceRound()">Avançar Rodada</button>
                         <button class="btn btn-red" onclick="resetEngine()">Zerar Simulação</button>
                     </div>
-
-                    <h3 style="margin-top: 1.5rem;">📢 Disparar Desafio no Sistema</h3>
-                    <div class="form-group">
-                        <label>Evento Operacional em Tempo Real</label>
-                        <select id="profEventSelect">
-                            <option value="DEMANDA_PICO">🔥 Peak Demand: Pedido Emergencial de 40 Unidades</option>
-                            <option value="CRISE_FORNECEDOR">⚠️ Falha na Cadeia: Atraso de Insumos</option>
-                        </select>
-                    </div>
-                    <button id="btnDispatchEvent" class="btn" onclick="dispatchMarketEvent()">Lançar Desafio para os Alunos</button>
                 </div>
 
                 <div>
-                    <h3>📌 Log de Atividades da Empresa</h3>
-                    <div id="profLiveLog" style="background:#0f172a; padding:0.8rem; border-radius:6px; font-size:0.8rem; height:260px; overflow-y:auto; font-family:monospace; color:var(--accent-blue);">
-                        > Sistema SPAE v2.0 inicializado.<br>
-                        > Aguardando inscrições de alunos...
+                    <h3>👥 Candidatos Inscritos & Triagem de Liderança</h3>
+                    <div style="background:#0f172a; padding:0.8rem; border-radius:6px; margin-bottom:1rem; border:1px solid var(--border-color); max-height:200px; overflow-y:auto;">
+                        <div id="teacherScreeningList">
+                            <div style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum aluno inscrito no portal ainda.</div>
+                        </div>
+                    </div>
+
+                    <h3>📌 Log de Atividades e Projetos</h3>
+                    <div id="profLiveLog" style="background:#0f172a; padding:0.8rem; border-radius:6px; font-size:0.8rem; height:240px; overflow-y:auto; font-family:monospace; color:var(--accent-blue);">
+                        > SPAE v2.0 com Módulo de Projetos por UC ativo.<br>
+                        > Aguardando ação do Professor...
                     </div>
                 </div>
             </div>
@@ -353,8 +383,6 @@
         <!-- 2. SETUP DE RH -->
         <section id="tab-hr" class="panel">
             <h2>👔 Estruturação de Equipes & Lotação de Cargos</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Alocação dos alunos inscritos nos setores e níveis funcionais.</p>
-
             <div class="grid-2">
                 <div>
                     <h3>Alocação de Candidatos</h3>
@@ -416,21 +444,12 @@
 
         <!-- 8. MANUAL INTEGRADO -->
         <section id="tab-manual" class="panel">
-            <h2>📖 Manual de Operação e Diretrizes Pedagógicas (SPAE v2.0)</h2>
+            <h2>📖 Manual do SPAE v2.0 — Guia do Professor & Aluno</h2>
             <div class="manual-card">
-                <h3 style="color:var(--accent-yellow);">1. Intenção Pedagógica</h3>
+                <h3 style="color:var(--accent-yellow);">1. Projetos Especiais por Unidade Curricular (UC)</h3>
                 <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5; margin-top:0.4rem;">
-                    O SPAE simula os fluxos reais de informação, documentos e autorizações de uma empresa corporativa sem restrição estrita de tamanho de turma. Erros cometidos durante a simulação funcionam como objeto de discussão e aprendizado durante o <em>debriefing</em> pedagógico.
+                    O formador pode utilizar o gerador na Aba Mercado para lecionar UCs específicas (ex: SST, Qualidade, Logística). O sistema gera desafios com tarefas para todos os setores da empresa, promovendo o aprendizado integrador sem desconstruir a base de dados do ERP.
                 </p>
-            </div>
-            <div class="manual-card">
-                <h3 style="color:var(--accent-blue);">2. O que faz cada Módulo (Núcleo Duro)</h3>
-                <ul style="font-size:0.85rem; color:var(--text-muted); line-height:1.6; margin-left:1.2rem; margin-top:0.4rem;">
-                    <li><strong>Agência RH (Aba 0):</strong> Cadastro do aluno com campos completos (Nome, Nascimento, Celular, E-mail) e aceite dos termos de alocação flexível.</li>
-                    <li><strong>Painel do Mercado / Professor (Aba 1):</strong> Ponto de controle do instrutor para aprovar alunos e disparar crises.</li>
-                    <li><strong>Setup de RH (Aba 2):</strong> Organiza o quadro de alunos por departamento e níveis de assistente (I, II e III).</li>
-                    <li><strong>Operação Encadeada (Abas 3 a 7):</strong> Fluxo sequencial da Gerência até o Faturamento com controle visual neon.</li>
-                </ul>
             </div>
         </section>
 
@@ -453,6 +472,14 @@
             SUP_ASSIST_1: { title: "Assistente Admin. I — Recebimento & Expedição", salary: 3200, level: "Nível I", desc: "Conferência física de notas e lançamento de entrada/saída de materiais." }
         };
 
+        const UC_TEMPLATES = {
+            SST: { title: "Adequação Emergencial da Planta às NRs de SST", budget: 18000, desc: "A empresa precisa adequar o parque fabril às exigências de Saúde e Segurança do Trabalho para evitar interdição preventiva.", tasks: { RH: "Dimensionar EPIs e agendar exames periódicos", SUPPLY: "Cotar e adquirir 50 kits de EPI e sinalização de segurança", PROD: "Reorganizar leiaute fabril e rotas de fuga", QUAL: "Emitir laudo de auditoria interna de SST", FIN: "Aprovar orçamentos e liquidar faturas de segurança" } },
+            RH_ROTINAS: { title: "Programa Integrado de Recrutamento & Clima", budget: 12000, desc: "Reestruturar a descrição dos postos de trabalho e implantar rotina de integração de novos colaboradores.", tasks: { RH: "Elaborar mapa de cargos e aplicar avaliação de desempenho", SUPPLY: "Adquirir materiais de integração e treinamentos", PROD: "Acompanhar adaptação operacional dos assistentes", QUAL: "Auditar índice de satisfação interna", FIN: "Calcular impacto da folha de pagamento no caixa" } },
+            QUALIDADE: { title: "Projeto Refugo Zero & Certificação de Qualidade", budget: 15000, desc: "Tratar não-conformidades críticas na linha de entrega para obter certificação de conformidade.", tasks: { RH: "Organizar reciclagem técnica para assistentes operacionais", SUPPLY: "Inspecionar matérias-primas no recebimento", PROD: "Aplicar folhas de verificação padrão na fabricação", QUAL: "Implantar controle estatístico e cartas de controle", FIN: "Mapear redução de custos com retrabalho" } },
+            LOGISTICA: { title: "Otimização da Acurácia de Estoque e Expedição", budget: 20000, desc: "Reduzir o Lead Time de expedição e eliminar divergências entre inventário físico e sistêmico.", tasks: { RH: "Escalar assistentes para inventário rotativo", SUPPLY: "Reorganizar almoxarifado com curva ABC", PROD: "Acelerar embalagem e paletização de pedidos", QUAL: "Inspecionar integridade de cargas no embarque", FIN: "Apurar custo de armazenagem e fretes" } },
+            FINANCEIRO_UC: { title: "Auditoria de Fluxo de Caixa e Custos Fixos", budget: 10000, desc: "Restruturar o contas a pagar/receber e renegociar margens com fornecedores.", tasks: { RH: "Revisar folha de encargos e adicionais", SUPPLY: "Renegociar prazos de pagamento com fornecedores", PROD: "Mapear desperdícios operacionais de matéria-prima", QUAL: "Validar precificação e SLA dos contratos", FIN: "Consolidar fluxo de caixa e balancete diário" } }
+        };
+
         let state = {
             phase: 'RH_ONBOARDING',
             round: 0,
@@ -463,7 +490,8 @@
             candidates: [],
             employees: [],
             orders: [],
-            logs: []
+            logs: [],
+            currentProject: null
         };
 
         const channel = new BroadcastChannel('VERTICE_ERP_ENGINE_2026');
@@ -471,6 +499,7 @@
         window.onload = () => {
             setupSync();
             renderJobPreview();
+            loadUcTemplate();
             updateDashboardUI();
             renderAllQueues();
         };
@@ -525,11 +554,90 @@
                     <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.4; margin-bottom:0.6rem;">
                         <strong>Descrição das Atividades:</strong> ${j.desc}
                     </p>
-                    <div style="font-size:0.75rem; background:#1e293b; padding:0.5rem; border-radius:4px; color:var(--accent-blue);">
-                        📌 Benefícios Fictícios: PLR + Vale Alimentação + Seguro de Vida Corporativo.
-                    </div>
                 </div>
             `;
+        }
+
+        function loadUcTemplate() {
+            const ucKey = document.getElementById('projUcSelect').value;
+            const tpl = UC_TEMPLATES[ucKey] || UC_TEMPLATES.SST;
+
+            document.getElementById('projTitle').value = tpl.title;
+            document.getElementById('projScenario').value = tpl.desc;
+            document.getElementById('projBudget').value = tpl.budget;
+        }
+
+        function generateProjectPreview() {
+            const ucKey = document.getElementById('projUcSelect').value;
+            const tpl = UC_TEMPLATES[ucKey] || UC_TEMPLATES.SST;
+            const title = document.getElementById('projTitle').value;
+
+            state.currentProject = {
+                ucKey, title,
+                scenario: document.getElementById('projScenario').value,
+                budget: parseFloat(document.getElementById('projBudget').value),
+                rounds: parseInt(document.getElementById('projRounds').value),
+                tasks: { ...tpl.tasks },
+                customIdeas: []
+            };
+
+            renderProjectPreviewText();
+            document.getElementById('projectPreviewBox').style.display = 'block';
+        }
+
+        function renderProjectPreviewText() {
+            if (!state.currentProject) return;
+            const p = state.currentProject;
+            let html = `<strong>Projeto:</strong> ${p.title}<br>`;
+            html += `<strong>Orçamento:</strong> R$ ${p.budget.toLocaleString('pt-BR')} | <strong>Prazo:</strong> ${p.rounds} Rodadas<br><br>`;
+            html += `• <strong>RH:</strong> ${p.tasks.RH}<br>`;
+            html += `• <strong>Compras:</strong> ${p.tasks.SUPPLY}<br>`;
+            html += `• <strong>Produção:</strong> ${p.tasks.PROD}<br>`;
+            html += `• <strong>Qualidade:</strong> ${p.tasks.QUAL}<br>`;
+            html += `• <strong>Financeiro:</strong> ${p.tasks.FIN}<br>`;
+
+            if (p.customIdeas && p.customIdeas.length > 0) {
+                html += `<br><strong style="color:var(--accent-yellow);">Exigências Adicionais do Formador:</strong><br>`;
+                p.customIdeas.forEach((idea, idx) => {
+                    html += `+ (${idx + 1}) ${idea}<br>`;
+                });
+            }
+
+            document.getElementById('projTasksPreviewText').innerHTML = html;
+        }
+
+        function addIdeaToProject() {
+            const ideaInput = document.getElementById('projCustomIdea');
+            const val = ideaInput.value.trim();
+            if (!val || !state.currentProject) return;
+
+            state.currentProject.customIdeas.push(val);
+            ideaInput.value = '';
+            renderProjectPreviewText();
+        }
+
+        function publishSpecialProject() {
+            if (!state.currentProject) return;
+
+            const p = state.currentProject;
+            const newOrderId = 'PROJ_' + Math.floor(Math.random() * 8999 + 1000);
+
+            state.orders.push({
+                id: newOrderId,
+                type: 'PROJETO_ESPECIAL',
+                title: `[PROJETO UC] ${p.title}`,
+                step: 'MANAGER',
+                quantity: 40,
+                value: p.budget,
+                details: p
+            });
+
+            state.bottlenecks++;
+            logProf(`PROJETO DISPARADO: ${p.title} [ID: ${newOrderId}] enviado para os alunos.`);
+            alert(`🚀 Projeto Especial "${p.title}" disparado com sucesso para a turma!`);
+            
+            document.getElementById('projectPreviewBox').style.display = 'none';
+            sync();
         }
 
         function submitCandidate() {
@@ -540,7 +648,7 @@
             const appliedJob = document.getElementById('candJobSelect').value;
 
             if (!name || !birth || !phone || !email) {
-                return alert('Por favor, preencha todos os campos obrigatórios (Nome, Data de Nascimento, Celular e E-mail)!');
+                return alert('Por favor, preencha todos os campos obrigatórios!');
             }
 
             const q1 = document.getElementById('q1').value;
@@ -550,23 +658,18 @@
             let scores = { L: 0, P: 0, C: 0 };
             scores[q1]++; scores[q2]++; scores[q3]++;
 
-            const newCand = {
+            state.candidates.push({
                 id: 'CAND_' + Math.floor(Math.random() * 8999 + 1000),
-                name, birth, phone, email,
-                appliedJob,
-                scores,
-                assigned: false
-            };
+                name, birth, phone, email, appliedJob, scores, assigned: false
+            });
 
-            state.candidates.push(newCand);
-            
             document.getElementById('candName').value = '';
             document.getElementById('candBirth').value = '';
             document.getElementById('candPhone').value = '';
             document.getElementById('candEmail').value = '';
 
-            logProf(`INSCRIÇÃO REALIZADA: ${name} (${email}) candidatou-se para ${JOB_PROFILES[appliedJob].title}.`);
-            alert('✅ Inscrição realizada com sucesso! Seus dados foram enviados para a avaliação da Agência/Professor.');
+            logProf(`INSCRIÇÃO: ${name} (${email}) candidatou-se no sistema.`);
+            alert('✅ Inscrição realizada com sucesso!');
             sync();
         }
 
@@ -577,16 +680,13 @@
             cand.assigned = true;
             state.employees.push({
                 id: 'EMP_' + Math.floor(Math.random() * 8999 + 1000),
-                name: cand.name,
-                email: cand.email,
-                phone: cand.phone,
-                roleKey: cand.appliedJob,
-                roleTitle: JOB_PROFILES[cand.appliedJob].title,
+                name: cand.name, email: cand.email, phone: cand.phone,
+                roleKey: cand.appliedJob, roleTitle: JOB_PROFILES[cand.appliedJob].title,
                 tasksCompleted: 0
             });
 
             state.phase = 'DRAFTING';
-            logProf(`ALUNO ALOCADO: ${cand.name} aprovado como ${JOB_PROFILES[cand.appliedJob].title}.`);
+            logProf(`ALUNO ALOCADO: ${cand.name} aprovado.`);
             sync();
         }
 
@@ -604,25 +704,6 @@
             sync();
         }
 
-        function dispatchMarketEvent() {
-            if (state.employees.length === 0) return alert('Cadastre alunos antes de disparar eventos!');
-            const eventType = document.getElementById('profEventSelect').value;
-            const newOrderId = 'ORD_' + Math.floor(Math.random() * 8999 + 1000);
-
-            state.orders.push({
-                id: newOrderId,
-                type: eventType,
-                title: eventType === 'DEMANDA_PICO' ? 'Pedido Emergencial (40 Unid)' : 'Atraso de Insumos',
-                step: 'MANAGER',
-                quantity: 40,
-                value: 12000
-            });
-
-            state.bottlenecks++;
-            logProf(`EVENTO DISPARADO: ${newOrderId}`);
-            sync();
-        }
-
         function buyStock(qty, cost) {
             if (state.cash < cost) return alert('Caixa insuficiente!');
             state.cash -= cost;
@@ -636,14 +717,14 @@
             if (!order) return;
 
             if (order.step === 'PRODUCTION' && nextStep === 'QUALITY') {
-                if (state.inventory < order.quantity) return alert(`Insumos insuficientes! Compras precisa repor estoque.`);
+                if (state.inventory < order.quantity) return alert(`Insumos insuficientes em estoque!`);
                 state.inventory -= order.quantity;
             }
 
             if (nextStep === 'DONE') {
                 state.cash += order.value;
                 if (state.bottlenecks > 0) state.bottlenecks--;
-                logProf(`FATURAMENTO CONCLUÍDO: Ordem ${order.id}`);
+                logProf(`CONCLUÍDO: Ordem ${order.id}`);
             }
 
             order.step = nextStep;
@@ -656,24 +737,24 @@
 
             if (state.phase === 'RH_ONBOARDING') {
                 if (state.candidates.length === 0) {
-                    gpsText.innerHTML = "👉 <strong>PASSO 1:</strong> Preencha a inscrição na aba <span style='color:#facc15;'>'0. Agência RH'</span> para participar!";
+                    gpsText.innerHTML = "👉 <strong>PASSO 1:</strong> Preencha a inscrição na aba <span style='color:#facc15;'>'0. Agência RH'</span>!";
                     document.getElementById('nav-agency').classList.add('btn-active-glow');
                     document.getElementById('btnSubmitCand').classList.add('btn-active-glow');
                 } else {
-                    gpsText.innerHTML = "👉 <strong>PASSO 2:</strong> O Professor deve ir na aba <span style='color:#facc15;'>'1. Mercado'</span> e aprovar os alunos inscritos.";
+                    gpsText.innerHTML = "👉 <strong>PASSO 2:</strong> O Professor deve ir na aba <span style='color:#facc15;'>'1. Mercado'</span> e aprovar os alunos.";
                     document.getElementById('nav-prof').classList.add('btn-active-glow');
                 }
                 return;
             }
 
             if (state.orders.length === 0) {
-                gpsText.innerHTML = "👉 <strong>PASSO 3:</strong> Quadro de alunos alocado! O Professor deve ir na aba <span style='color:#facc15;'>'1. Mercado'</span> e disparar a primeira demanda.";
+                gpsText.innerHTML = "👉 <strong>PASSO 3:</strong> Selecione uma UC na aba <span style='color:#facc15;'>'1. Mercado'</span> para gerar e disparar um Projeto Especial!";
                 document.getElementById('nav-prof').classList.add('btn-active-glow');
-                document.getElementById('btnDispatchEvent').classList.add('btn-active-glow');
+                document.getElementById('btnGeneratePreview').classList.add('btn-active-glow');
                 return;
             }
 
-            gpsText.innerHTML = "👉 <strong>OPERAÇÃO ATIVA:</strong> Siga os botões piscantes para processar as ordens em cascata!";
+            gpsText.innerHTML = "👉 <strong>PROJETO EM EXECUÇÃO:</strong> Siga a sequência dos botões piscantes para concluir as missões!";
         }
 
         function renderAllQueues() {
@@ -686,7 +767,7 @@
                     <div style="background:#1e293b; padding:0.5rem; border-radius:6px; margin-bottom:0.4rem; font-size:0.82rem;">
                         <strong>${c.name}</strong> (${c.phone})<br>
                         <span style="color:var(--text-muted);">Vaga: ${JOB_PROFILES[c.appliedJob].title}</span><br>
-                        <button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem; margin-top:0.2rem;" onclick="approveLeader('${c.id}')">Aprovar Aluno no Quadro</button>
+                        <button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem; margin-top:0.2rem;" onclick="approveLeader('${c.id}')">Aprovar Aluno</button>
                     </div>
                 `;
             });
@@ -704,7 +785,91 @@
                 `;
             });
 
+            renderQueuesInternal();
             updateLuminousGuide();
+        }
+
+        function renderQueuesInternal() {
+            // Manager
+            const mgrBox = document.getElementById('managerOrdersList');
+            const mgrOrders = state.orders.filter(o => o.step === 'MANAGER');
+            mgrBox.innerHTML = mgrOrders.length === 0 ? '<div style="text-align:center; color:var(--text-muted)">Nenhum projeto pendente.</div>' : '';
+            mgrOrders.forEach(o => {
+                mgrBox.innerHTML += `
+                    <div class="task-card pending">
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong>${o.title} (${o.id})</strong>
+                            <span class="status-pill pill-orange">Gerência Geral</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin:0.4rem 0;">Aprovar plano de ação e liberar orçamento para Compras.</p>
+                        <button id="btn-action-${o.id}" class="btn btn-success" style="margin-top:0.3rem;" onclick="advanceTask('${o.id}', 'SUPPLY')">Aprovar e Liberar para Compras</button>
+                    </div>
+                `;
+            });
+
+            // Supply
+            const supBox = document.getElementById('supplyQueue');
+            const supOrders = state.orders.filter(o => o.step === 'SUPPLY');
+            supBox.innerHTML = supOrders.length === 0 ? '<div style="text-align:center; color:var(--text-muted)">Fila limpa.</div>' : '';
+            supOrders.forEach(o => {
+                supBox.innerHTML += `
+                    <div class="task-card pending">
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong>Insumos / Materiais para ${o.id}</strong>
+                            <span class="status-pill pill-orange">Compras & Logística</span>
+                        </div>
+                        <button id="btn-action-${o.id}" class="btn btn-success" style="margin-top:0.3rem;" onclick="advanceTask('${o.id}', 'PRODUCTION')">Liberar Materiais para Operação</button>
+                    </div>
+                `;
+            });
+
+            // Production
+            const prodBox = document.getElementById('productionQueue');
+            const prodOrders = state.orders.filter(o => o.step === 'PRODUCTION');
+            prodBox.innerHTML = prodOrders.length === 0 ? '<div style="text-align:center; color:var(--text-muted)">Nenhuma tarefa em execução.</div>' : '';
+            prodOrders.forEach(o => {
+                prodBox.innerHTML += `
+                    <div class="task-card pending">
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong>Execução do Projeto ${o.id}</strong>
+                            <span class="status-pill pill-blue">Operação & Produção</span>
+                        </div>
+                        <button id="btn-action-${o.id}" class="btn btn-success" style="margin-top:0.3rem;" onclick="advanceTask('${o.id}', 'QUALITY')">Finalizar Execução e Enviar p/ Qualidade</button>
+                    </div>
+                `;
+            });
+
+            // Quality
+            const qualBox = document.getElementById('qualityQueue');
+            const qualOrders = state.orders.filter(o => o.step === 'QUALITY');
+            qualBox.innerHTML = qualOrders.length === 0 ? '<div style="text-align:center; color:var(--text-muted)">Nenhuma auditoria pendente.</div>' : '';
+            qualOrders.forEach(o => {
+                qualBox.innerHTML += `
+                    <div class="task-card pending">
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong>Auditoria de Qualidade & SLA ${o.id}</strong>
+                            <span class="status-pill pill-orange">Qualidade</span>
+                        </div>
+                        <button id="btn-action-${o.id}" class="btn btn-success" style="margin-top:0.3rem;" onclick="advanceTask('${o.id}', 'FINANCE')">Aprovar Laudo e Liberar Faturamento</button>
+                    </div>
+                `;
+            });
+
+            // Finance
+            const finBox = document.getElementById('financeQueue');
+            const finOrders = state.orders.filter(o => o.step === 'FINANCE');
+            finBox.innerHTML = finOrders.length === 0 ? '<div style="text-align:center; color:var(--text-muted)">Nenhum faturamento pendente.</div>' : '';
+            finOrders.forEach(o => {
+                finBox.innerHTML += `
+                    <div class="task-card pending">
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong>Liquidação do Projeto ${o.id}</strong>
+                            <span class="status-pill pill-green">Valor: R$ ${o.value}</span>
+                        </div>
+                        <button id="btn-action-${o.id}" class="btn btn-success" style="margin-top:0.3rem;" onclick="advanceTask('${o.id}', 'DONE')">Liquidar no Caixa e Concluir Projeto</button>
+                    </div>
+                `;
+            });
         }
 
         function resetEngine() {
