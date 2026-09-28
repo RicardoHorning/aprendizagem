@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPAE v2.0 - Simulador de Práticas Administrativas Empresariais</title>
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --panel-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+            --accent-yellow: #facc15;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 2px solid var(--border-color);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 1.1rem; font-weight: 800; color: var(--accent-blue); display: flex; align-items: center; gap: 8px; }
+
+        .hud-dashboard {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            background: #0f172a;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent-blue);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .hud-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0.5rem;
+            border-right: 1px solid var(--border-color);
+        }
+        .hud-card:last-child { border-right: none; }
+        .hud-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
+        .hud-value { font-size: 0.95rem; font-weight: 800; color: var(--text-light); }
+
+        .gps-banner {
+            background: linear-gradient(90deg, #854d0e, #a16207);
+            color: #fef08a;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--accent-yellow);
+        }
+
+        nav {
+            background: #0f172a;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        .nav-btn.active { background: var(--accent-blue); color: #000; border-color: var(--accent-blue); }
+
+        @keyframes superGlow {
+            0% { background-color: var(--accent-yellow) !important; color: #000 !important; box-shadow: 0 0 5px 2px var(--accent-yellow); transform: scale(1); }
+            50% { background-color: var(--accent-green) !important; color: #000 !important; box-shadow: 0 0 25px 10px var(--accent-green); transform: scale(1.05); }
+            100% { background-color: var(--accent-yellow) !important; color: #000 !important; box-shadow: 0 0 5px 2px var(--accent-yellow); transform: scale(1); }
+        }
+
+        .btn-active-glow { animation: superGlow 1s infinite ease-in-out !important; font-weight: 800 !important; position: relative; z-index: 99; }
+
+        main { flex: 1; padding: 1.2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+
+        .panel { display: none; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; }
+        .panel.active { display: block; animation: fadeIn 0.2s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { color: var(--accent-blue); margin-bottom: 1rem; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
+        h3 { color: var(--text-light); margin: 0.8rem 0; font-size: 1rem; }
+
+        .form-group { margin-bottom: 0.8rem; }
+        label { display: block; margin-bottom: 0.2rem; color: var(--text-muted); font-size: 0.8rem; font-weight: 600; }
+        input, select, textarea {
+            width: 100%; padding: 0.6rem; background: #0f172a; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-light); font-size: 0.9rem;
+        }
+
+        .btn {
+            background: var(--accent-blue); color: #000; font-weight: 700; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; transition: all 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-success { background: var(--accent-green); color: #fff; }
+        .btn-orange { background: var(--accent-orange); color: #000; }
+        .btn-red { background: var(--accent-red); color: #fff; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.85rem; }
+        th, td { border: 1px solid var(--border-color); padding: 0.6rem; text-align: left; }
+        th { background: #0f172a; color: var(--accent-blue); }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; }
+        
+        .task-card {
+            background: #0f172a; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1rem; border-radius: 6px; margin-bottom: 0.8rem;
+        }
+        .task-card.pending { border-left-color: var(--accent-orange); }
+
+        .status-pill { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .pill-orange { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
+        .pill-green { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .pill-blue { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+
+        /* AVISO E CARD DE DETALHES DA VAGA */
+        .notice-box {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--accent-orange);
+            border-left: 4px solid var(--accent-orange);
+            padding: 0.8rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: #fef08a;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .job-detail-card {
+            background: #0f172a;
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .manual-card { background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.2rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">⚡ SPAE v2.0 <span style="font-size: 0.75rem; background: var(--accent-purple); color: #fff; padding: 2px 6px; border-radius: 4px;">SIMULATOR ENGINE</span></div>
+        
+        <div class="hud-dashboard">
+            <div class="hud-card">
+                <span class="hud-label">Caixa Empresa</span>
+                <span class="hud-value" id="hudCash" style="color: var(--accent-green);">R$ 100.000,00</span>
+            </div>
+            <div class="hud-card">
+                <span class="hud-label">Estoque Insumos</span>
+                <span class="hud-value" id="hudInventory">10 Unid</span>
+            </div>
+            <div class="hud-card">
+                <span class="hud-label">Índice SLA</span>
+                <span class="hud-value" id="hudSLA" style="color: var(--accent-blue);">100%</span>
+            </div>
+            <div class="hud-card">
+                <span class="hud-label">Gargalos Ativos</span>
+                <span class="hud-value" id="hudBottlenecks" style="color: var(--accent-orange);">0</span>
+            </div>
+            <div class="hud-card">
+                <span class="hud-label">Turma</span>
+                <span class="hud-value" id="hudStudents" style="color: var(--accent-yellow);">0 Inscritos</span>
+            </div>
+        </div>
+    </header>
+
+    <div id="gpsBanner" class="gps-banner">
+        <span>🧭 GUIA DO SISTEMA:</span> <span id="gpsText">Iniciando simulação...</span>
+    </div>
+
+    <nav>
+        <button id="nav-agency" class="nav-btn active" onclick="switchTab('tab-agency')">💼 0. Agência RH (Inscrição)</button>
+        <button id="nav-prof" class="nav-btn" onclick="switchTab('tab-prof')">🎛️ 1. Mercado (Professor)</button>
+        <button id="nav-hr" class="nav-btn" onclick="switchTab('tab-hr')">👔 2. Setup RH & Equipes</button>
+        <button id="nav-manager" class="nav-btn" onclick="switchTab('tab-manager')">📋 3. Gerência Geral</button>
+        <button id="nav-supply" class="nav-btn" onclick="switchTab('tab-supply')">📦 4. Compras & Logística</button>
+        <button id="nav-production" class="nav-btn" onclick="switchTab('tab-production')">⚙️ 5. Operação & Produção</button>
+        <button id="nav-quality" class="nav-btn" onclick="switchTab('tab-quality')">🔍 6. Qualidade & SLA</button>
+        <button id="nav-finance" class="nav-btn" onclick="switchTab('tab-finance')">💰 7. Financeiro & Faturamento</button>
+        <button id="nav-manual" class="nav-btn" onclick="switchTab('tab-manual')" style="border-color:var(--accent-yellow); color:var(--accent-yellow);">📖 8. Manual do Sistema</button>
+    </nav>
+
+    <main>
+
+        <!-- 0. AGÊNCIA DE RH / INSCRIÇÃO DO ALUNO -->
+        <section id="tab-agency" class="panel active">
+            <h2>💼 Agência de RH — Inscrição do Aluno & Seleção de Perfil</h2>
+            
+            <div class="notice-box">
+                ⚠️ <strong>Aviso Importante aos Candidatos:</strong> Ao realizar sua inscrição, você declara ciência de que sua candidatura servirá de base para a avaliação de perfil pela Agência/Professor, podendo você ser aprovado, selecionado ou promovido para <strong>qualquer oportunidade ou setor dentro da empresa</strong>, conforme as necessidades organizacionais da simulação.
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <h3>📄 Dados do Candidato & Formulário de Inscrição</h3>
+                    <div style="background:#0f172a; padding:1rem; border-radius:8px; border:1px solid var(--border-color); margin-top:0.5rem;">
+                        <div class="form-group">
+                            <label>Nome Completo do Aluno *</label>
+                            <input type="text" id="candName" placeholder="Ex: Rodrigo Santos">
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.8rem;">
+                            <div class="form-group">
+                                <label>Data de Nascimento *</label>
+                                <input type="date" id="candBirth">
+                            </div>
+                            <div class="form-group">
+                                <label>Celular / WhatsApp *</label>
+                                <input type="tel" id="candPhone" placeholder="(41) 99999-8888">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>E-mail *</label>
+                            <input type="email" id="candEmail" placeholder="aluno@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Vaga de Preferência *</label>
+                            <select id="candJobSelect" onchange="renderJobPreview()">
+                                <option value="GERENTE">Diretor / Gerente Geral</option>
+                                <option value="RH_SUP">Supervisor(a) de RH</option>
+                                <option value="RH_ASSIST_3">Assistente Admin. III — Folha & Trabalhista</option>
+                                <option value="RH_ASSIST_2">Assistente Admin. II — Recrutamento & Seleção</option>
+                                <option value="RH_ASSIST_1">Assistente Admin. I — Ponto & Atendimento</option>
+                                <option value="FIN_SUP">Supervisor(a) Financeiro</option>
+                                <option value="FIN_ASSIST_3">Assistente Admin. III — Contas a Pagar/Receber</option>
+                                <option value="FIN_ASSIST_2">Assistente Admin. II — Conciliação Bancária</option>
+                                <option value="FIN_ASSIST_1">Assistente Admin. I — Faturamento & Recibos</option>
+                                <option value="SUP_SUP">Supervisor(a) de Suprimentos & Logística</option>
+                                <option value="SUP_ASSIST_3">Assistente Admin. III — Cotações & Compras</option>
+                                <option value="SUP_ASSIST_2">Assistente Admin. II — Controle de Estoque</option>
+                                <option value="SUP_ASSIST_1">Assistente Admin. I — Recebimento & Expedição</option>
+                            </select>
+                        </div>
+
+                        <h4 style="color:var(--accent-yellow); margin:1rem 0 0.5rem 0; font-size:0.88rem;">🧠 Quiz de Triagem de Perfil (3 Questões):</h4>
+                        
+                        <div class="form-group">
+                            <label>1. Diante de um grande volume de tarefas acentuado no setor, qual sua atitude?</label>
+                            <select id="q1">
+                                <option value="L">Assumo a liderança, organizo os colegas e divido as tarefas. (+Liderança)</option>
+                                <option value="P">Organizo a fila por prioridade e reviso item por item. (+Processos)</option>
+                                <option value="C">Alinho com os outros setores para entender a urgência real. (+Mediação)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>2. Qual tipo de atividade te traz mais satisfação?</label>
+                            <select id="q2">
+                                <option value="L">Conduzir reuniões, alinhar metas e coordenar pessoas. (+Liderança)</option>
+                                <option value="P">Conferir planilhas, notas fiscais e relatórios técnicos. (+Processos)</option>
+                                <option value="C">Atender pessoas, resolver dúvidas e negociar acordos. (+Mediação)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>3. Se identificar um erro no relatório entregue por outro setor, o que faz?</label>
+                            <select id="q3">
+                                <option value="L">Oriento a equipe sobre o fluxo correto para evitar novas falhas. (+Liderança)</option>
+                                <option value="P">Rastreio os lançamentos no sistema para corrigir a divergência. (+Processos)</option>
+                                <option value="C">Conversaria com o responsável com calma para ajustar o dado. (+Mediação)</option>
+                            </select>
+                        </div>
+
+                        <button id="btnSubmitCand" class="btn btn-success" style="width:100%; margin-top:0.5rem;" onclick="submitCandidate()">Confirmar e Enviar Inscrição</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>📌 Detalhes da Vaga Selecionada</h3>
+                    <div id="jobPreviewContainer">
+                        <!-- Preenchido via JS conforme vaga selecionada -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. CONTROLE DO PROFESSOR -->
+        <section id="tab-prof" class="panel">
+            <h2>🎛️ Painel do Mercado & Triagem (Professor)</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Dispare demandas, aprove os líderes e conduza a dinâmica da turma.</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>👥 Candidatos Inscritos & Triagem de Liderança</h3>
+                    <div style="background:#0f172a; padding:0.8rem; border-radius:6px; margin-bottom:1rem; border:1px solid var(--border-color); max-height:220px; overflow-y:auto;">
+                        <div id="teacherScreeningList">
+                            <div style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum aluno inscrito no portal ainda.</div>
+                        </div>
+                    </div>
+
+                    <h3>🚀 Controle do Ciclo de Aula</h3>
+                    <div style="display: flex; gap: 8px; margin-top: 0.5rem; flex-wrap:wrap;">
+                        <button id="btnStartGamePhase" class="btn btn-success" onclick="startOperationalGame()">🚀 Iniciar Operação (Rodada 1)</button>
+                        <button id="btnAdvanceRound" class="btn btn-orange" onclick="advanceRound()">Avançar Rodada</button>
+                        <button class="btn btn-red" onclick="resetEngine()">Zerar Simulação</button>
+                    </div>
+
+                    <h3 style="margin-top: 1.5rem;">📢 Disparar Desafio no Sistema</h3>
+                    <div class="form-group">
+                        <label>Evento Operacional em Tempo Real</label>
+                        <select id="profEventSelect">
+                            <option value="DEMANDA_PICO">🔥 Peak Demand: Pedido Emergencial de 40 Unidades</option>
+                            <option value="CRISE_FORNECEDOR">⚠️ Falha na Cadeia: Atraso de Insumos</option>
+                        </select>
+                    </div>
+                    <button id="btnDispatchEvent" class="btn" onclick="dispatchMarketEvent()">Lançar Desafio para os Alunos</button>
+                </div>
+
+                <div>
+                    <h3>📌 Log de Atividades da Empresa</h3>
+                    <div id="profLiveLog" style="background:#0f172a; padding:0.8rem; border-radius:6px; font-size:0.8rem; height:260px; overflow-y:auto; font-family:monospace; color:var(--accent-blue);">
+                        > Sistema SPAE v2.0 inicializado.<br>
+                        > Aguardando inscrições de alunos...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SETUP DE RH -->
+        <section id="tab-hr" class="panel">
+            <h2>👔 Estruturação de Equipes & Lotação de Cargos</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Alocação dos alunos inscritos nos setores e níveis funcionais.</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Alocação de Candidatos</h3>
+                    <div id="draftTalentPool" style="margin-top:0.5rem;"></div>
+                </div>
+
+                <div>
+                    <h3>Quadro de Funcionários Ativos</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Setor / Cargo</th>
+                                <th>Contato</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblEmployees">
+                            <tr><td colspan="4" style="text-align:center;">Nenhum aluno alocado ainda.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. GERÊNCIA GERAL -->
+        <section id="tab-manager" class="panel">
+            <h2>📋 Terminal da Gerência Geral</h2>
+            <div id="managerOrdersList"></div>
+        </section>
+
+        <!-- 4. SUPRIMENTOS -->
+        <section id="tab-supply" class="panel">
+            <h2>📦 Terminal de Compras & Logística</h2>
+            <div class="form-group" style="background:#0f172a; padding:1rem; border-radius:6px; margin-bottom:1rem;">
+                <h3>🛒 Reposição de Estoque</h3>
+                <button id="btnBuyStock" class="btn btn-success" onclick="buyStock(50, 4500)">Comprar Lote 50 Unid (R$ 4.500)</button>
+            </div>
+            <div id="supplyQueue"></div>
+        </section>
+
+        <!-- 5. PRODUÇÃO -->
+        <section id="tab-production" class="panel">
+            <h2>⚙️ Terminal de Operação & Produção</h2>
+            <div id="productionQueue"></div>
+        </section>
+
+        <!-- 6. QUALIDADE -->
+        <section id="tab-quality" class="panel">
+            <h2>🔍 Terminal de Controle de Qualidade</h2>
+            <div id="qualityQueue"></div>
+        </section>
+
+        <!-- 7. FINANCEIRO -->
+        <section id="tab-finance" class="panel">
+            <h2>💰 Terminal Financeiro & Faturamento</h2>
+            <div id="financeQueue"></div>
+        </section>
+
+        <!-- 8. MANUAL INTEGRADO -->
+        <section id="tab-manual" class="panel">
+            <h2>📖 Manual de Operação e Diretrizes Pedagógicas (SPAE v2.0)</h2>
+            <div class="manual-card">
+                <h3 style="color:var(--accent-yellow);">1. Intenção Pedagógica</h3>
+                <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5; margin-top:0.4rem;">
+                    O SPAE simula os fluxos reais de informação, documentos e autorizações de uma empresa corporativa sem restrição estrita de tamanho de turma. Erros cometidos durante a simulação funcionam como objeto de discussão e aprendizado durante o <em>debriefing</em> pedagógico.
+                </p>
+            </div>
+            <div class="manual-card">
+                <h3 style="color:var(--accent-blue);">2. O que faz cada Módulo (Núcleo Duro)</h3>
+                <ul style="font-size:0.85rem; color:var(--text-muted); line-height:1.6; margin-left:1.2rem; margin-top:0.4rem;">
+                    <li><strong>Agência RH (Aba 0):</strong> Cadastro do aluno com campos completos (Nome, Nascimento, Celular, E-mail) e aceite dos termos de alocação flexível.</li>
+                    <li><strong>Painel do Mercado / Professor (Aba 1):</strong> Ponto de controle do instrutor para aprovar alunos e disparar crises.</li>
+                    <li><strong>Setup de RH (Aba 2):</strong> Organiza o quadro de alunos por departamento e níveis de assistente (I, II e III).</li>
+                    <li><strong>Operação Encadeada (Abas 3 a 7):</strong> Fluxo sequencial da Gerência até o Faturamento com controle visual neon.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const JOB_PROFILES = {
+            GERENTE: { title: "Diretor / Gerente Geral", salary: 14500, level: "Gestão", desc: "Supervisão global da empresa, aprovação estratégica de ordens e coordenação dos setores." },
+            RH_SUP: { title: "Supervisor(a) de RH", salary: 9800, level: "Supervisão", desc: "Gestão do quadro de colaboradores, aprovação da folha e clima organizacional." },
+            RH_ASSIST_3: { title: "Assistente Admin. III — Folha & Trabalhista", salary: 6500, level: "Nível III", desc: "Cálculo de encargos, folha de pagamento e aplicação das normas da CLT." },
+            RH_ASSIST_2: { title: "Assistente Admin. II — Recrutamento & Seleção", salary: 4500, level: "Nível II", desc: "Triagem de cadastros, agendamento de entrevistas e integração." },
+            RH_ASSIST_1: { title: "Assistente Admin. I — Ponto & Atendimento", salary: 3200, level: "Nível I", desc: "Registro diário de ponto, controle de documentos e arquivos do setor." },
+            FIN_SUP: { title: "Supervisor(a) Financeiro", salary: 9800, level: "Supervisão", desc: "Autorização de pagamentos, conciliação final e auditoria de caixa." },
+            FIN_ASSIST_3: { title: "Assistente Admin. III — Contas a Pagar/Receber", salary: 6500, level: "Nível III", desc: "Gestão do fluxo de caixa, títulos e relatórios gerenciais." },
+            FIN_ASSIST_2: { title: "Assistente Admin. II — Conciliação Bancária", salary: 4500, level: "Nível II", desc: "Conferência de extratos, baixas em comprovantes e lançamentos." },
+            FIN_ASSIST_1: { title: "Assistente Admin. I — Faturamento & Recibos", salary: 3200, level: "Nível I", desc: "Emissão de recibos, faturamento primário e arquivo fiscal." },
+            SUP_SUP: { title: "Supervisor(a) de Suprimentos & Logística", salary: 9800, level: "Supervisão", desc: "Aprovação de ordens de compra e homologação de fornecedores." },
+            SUP_ASSIST_3: { title: "Assistente Admin. III — Cotações & Compras", salary: 6500, level: "Nível III", desc: "Cotações complexas e negociação de prazos e valores com fornecedores." },
+            SUP_ASSIST_2: { title: "Assistente Admin. II — Controle de Estoque", salary: 4500, level: "Nível II", desc: "Controle do almoxarifado, níveis mínimos e inventário de insumos." },
+            SUP_ASSIST_1: { title: "Assistente Admin. I — Recebimento & Expedição", salary: 3200, level: "Nível I", desc: "Conferência física de notas e lançamento de entrada/saída de materiais." }
+        };
+
+        let state = {
+            phase: 'RH_ONBOARDING',
+            round: 0,
+            cash: 100000,
+            inventory: 10,
+            sla: 100,
+            bottlenecks: 0,
+            candidates: [],
+            employees: [],
+            orders: [],
+            logs: []
+        };
+
+        const channel = new BroadcastChannel('VERTICE_ERP_ENGINE_2026');
+
+        window.onload = () => {
+            setupSync();
+            renderJobPreview();
+            updateDashboardUI();
+            renderAllQueues();
+        };
+
+        function setupSync() {
+            channel.onmessage = (e) => {
+                state = e.data;
+                updateDashboardUI();
+                renderAllQueues();
+            };
+        }
+
+        function sync() {
+            updateDashboardUI();
+            renderAllQueues();
+            channel.postMessage(state);
+        }
+
+        function updateDashboardUI() {
+            document.getElementById('hudCash').innerText = `R$ ${state.cash.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('hudInventory').innerText = `${state.inventory} Unid`;
+            document.getElementById('hudSLA').innerText = `${state.sla}%`;
+            document.getElementById('hudBottlenecks').innerText = state.bottlenecks;
+            document.getElementById('hudStudents').innerText = `${state.employees.length} Inscritos`;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            const navBtn = document.getElementById(tabId.replace('tab-', 'nav-'));
+            if(navBtn) navBtn.classList.add('active');
+        }
+
+        function logProf(msg) {
+            state.logs.unshift(`> [${new Date().toLocaleTimeString()}] ${msg}`);
+            document.getElementById('profLiveLog').innerHTML = state.logs.join('<br>');
+        }
+
+        function renderJobPreview() {
+            const key = document.getElementById('candJobSelect').value;
+            const j = JOB_PROFILES[key];
+            const container = document.getElementById('jobPreviewContainer');
+            
+            container.innerHTML = `
+                <div class="job-detail-card">
+                    <h4 style="color:var(--accent-yellow); font-size:1.1rem; margin-bottom:0.4rem;">${j.title}</h4>
+                    <div style="font-size:0.85rem; color:var(--accent-green); font-weight:bold; margin-bottom:0.4rem;">
+                        Remuneração Base: R$ ${j.salary.toLocaleString('pt-BR')}/mês (${j.level})
+                    </div>
+                    <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.4; margin-bottom:0.6rem;">
+                        <strong>Descrição das Atividades:</strong> ${j.desc}
+                    </p>
+                    <div style="font-size:0.75rem; background:#1e293b; padding:0.5rem; border-radius:4px; color:var(--accent-blue);">
+                        📌 Benefícios Fictícios: PLR + Vale Alimentação + Seguro de Vida Corporativo.
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitCandidate() {
+            const name = document.getElementById('candName').value.trim();
+            const birth = document.getElementById('candBirth').value;
+            const phone = document.getElementById('candPhone').value.trim();
+            const email = document.getElementById('candEmail').value.trim();
+            const appliedJob = document.getElementById('candJobSelect').value;
+
+            if (!name || !birth || !phone || !email) {
+                return alert('Por favor, preencha todos os campos obrigatórios (Nome, Data de Nascimento, Celular e E-mail)!');
+            }
+
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const q3 = document.getElementById('q3').value;
+
+            let scores = { L: 0, P: 0, C: 0 };
+            scores[q1]++; scores[q2]++; scores[q3]++;
+
+            const newCand = {
+                id: 'CAND_' + Math.floor(Math.random() * 8999 + 1000),
+                name, birth, phone, email,
+                appliedJob,
+                scores,
+                assigned: false
+            };
+
+            state.candidates.push(newCand);
+            
+            document.getElementById('candName').value = '';
+            document.getElementById('candBirth').value = '';
+            document.getElementById('candPhone').value = '';
+            document.getElementById('candEmail').value = '';
+
+            logProf(`INSCRIÇÃO REALIZADA: ${name} (${email}) candidatou-se para ${JOB_PROFILES[appliedJob].title}.`);
+            alert('✅ Inscrição realizada com sucesso! Seus dados foram enviados para a avaliação da Agência/Professor.');
+            sync();
+        }
+
+        function approveLeader(candId) {
+            const cand = state.candidates.find(c => c.id === candId);
+            if (!cand) return;
+
+            cand.assigned = true;
+            state.employees.push({
+                id: 'EMP_' + Math.floor(Math.random() * 8999 + 1000),
+                name: cand.name,
+                email: cand.email,
+                phone: cand.phone,
+                roleKey: cand.appliedJob,
+                roleTitle: JOB_PROFILES[cand.appliedJob].title,
+                tasksCompleted: 0
+            });
+
+            state.phase = 'DRAFTING';
+            logProf(`ALUNO ALOCADO: ${cand.name} aprovado como ${JOB_PROFILES[cand.appliedJob].title}.`);
+            sync();
+        }
+
+        function startOperationalGame() {
+            if (state.employees.length === 0) return alert('Cadastre alunos no quadro antes de iniciar a operação!');
+            state.phase = 'OPERATIONAL';
+            state.round = 1;
+            logProf(`OPERAÇÃO INICIADA: Rodada 1 ativa.`);
+            sync();
+        }
+
+        function advanceRound() {
+            state.round++;
+            logProf(`RODADA AVANÇADA: Rodada ${state.round}`);
+            sync();
+        }
+
+        function dispatchMarketEvent() {
+            if (state.employees.length === 0) return alert('Cadastre alunos antes de disparar eventos!');
+            const eventType = document.getElementById('profEventSelect').value;
+            const newOrderId = 'ORD_' + Math.floor(Math.random() * 8999 + 1000);
+
+            state.orders.push({
+                id: newOrderId,
+                type: eventType,
+                title: eventType === 'DEMANDA_PICO' ? 'Pedido Emergencial (40 Unid)' : 'Atraso de Insumos',
+                step: 'MANAGER',
+                quantity: 40,
+                value: 12000
+            });
+
+            state.bottlenecks++;
+            logProf(`EVENTO DISPARADO: ${newOrderId}`);
+            sync();
+        }
+
+        function buyStock(qty, cost) {
+            if (state.cash < cost) return alert('Caixa insuficiente!');
+            state.cash -= cost;
+            state.inventory += qty;
+            logProf(`COMPRA: +${qty} unidades de estoque.`);
+            sync();
+        }
+
+        function advanceTask(orderId, nextStep) {
+            let order = state.orders.find(o => o.id === orderId);
+            if (!order) return;
+
+            if (order.step === 'PRODUCTION' && nextStep === 'QUALITY') {
+                if (state.inventory < order.quantity) return alert(`Insumos insuficientes! Compras precisa repor estoque.`);
+                state.inventory -= order.quantity;
+            }
+
+            if (nextStep === 'DONE') {
+                state.cash += order.value;
+                if (state.bottlenecks > 0) state.bottlenecks--;
+                logProf(`FATURAMENTO CONCLUÍDO: Ordem ${order.id}`);
+            }
+
+            order.step = nextStep;
+            sync();
+        }
+
+        function updateLuminousGuide() {
+            document.querySelectorAll('.btn-active-glow').forEach(el => el.classList.remove('btn-active-glow'));
+            const gpsText = document.getElementById('gpsText');
+
+            if (state.phase === 'RH_ONBOARDING') {
+                if (state.candidates.length === 0) {
+                    gpsText.innerHTML = "👉 <strong>PASSO 1:</strong> Preencha a inscrição na aba <span style='color:#facc15;'>'0. Agência RH'</span> para participar!";
+                    document.getElementById('nav-agency').classList.add('btn-active-glow');
+                    document.getElementById('btnSubmitCand').classList.add('btn-active-glow');
+                } else {
+                    gpsText.innerHTML = "👉 <strong>PASSO 2:</strong> O Professor deve ir na aba <span style='color:#facc15;'>'1. Mercado'</span> e aprovar os alunos inscritos.";
+                    document.getElementById('nav-prof').classList.add('btn-active-glow');
+                }
+                return;
+            }
+
+            if (state.orders.length === 0) {
+                gpsText.innerHTML = "👉 <strong>PASSO 3:</strong> Quadro de alunos alocado! O Professor deve ir na aba <span style='color:#facc15;'>'1. Mercado'</span> e disparar a primeira demanda.";
+                document.getElementById('nav-prof').classList.add('btn-active-glow');
+                document.getElementById('btnDispatchEvent').classList.add('btn-active-glow');
+                return;
+            }
+
+            gpsText.innerHTML = "👉 <strong>OPERAÇÃO ATIVA:</strong> Siga os botões piscantes para processar as ordens em cascata!";
+        }
+
+        function renderAllQueues() {
+            const screenBox = document.getElementById('teacherScreeningList');
+            const unassigned = state.candidates.filter(c => !c.assigned);
+            
+            screenBox.innerHTML = unassigned.length === 0 ? '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum aluno pendente.</div>' : '';
+            unassigned.forEach(c => {
+                screenBox.innerHTML += `
+                    <div style="background:#1e293b; padding:0.5rem; border-radius:6px; margin-bottom:0.4rem; font-size:0.82rem;">
+                        <strong>${c.name}</strong> (${c.phone})<br>
+                        <span style="color:var(--text-muted);">Vaga: ${JOB_PROFILES[c.appliedJob].title}</span><br>
+                        <button class="btn btn-success" style="padding:2px 6px; font-size:0.7rem; margin-top:0.2rem;" onclick="approveLeader('${c.id}')">Aprovar Aluno no Quadro</button>
+                    </div>
+                `;
+            });
+
+            const tbody = document.getElementById('tblEmployees');
+            tbody.innerHTML = state.employees.length === 0 ? '<tr><td colspan="4" style="text-align:center;">Nenhum aluno alocado.</td></tr>' : '';
+            state.employees.forEach(e => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${e.name}</strong></td>
+                        <td>${e.roleTitle}</td>
+                        <td>${e.phone || 'N/A'}</td>
+                        <td><span class="status-pill pill-green">Ativo</span></td>
+                    </tr>
+                `;
+            });
+
+            updateLuminousGuide();
+        }
+
+        function resetEngine() {
+            if (confirm('Deseja zerar a simulação?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
