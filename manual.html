@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Operação e Diretrizes Pedagógicas — SPAE v2.0</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-orange: #f59e0b;
+            --accent-yellow: #facc15;
+            --accent-purple: #a855f7;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title h1 { font-size: 1.4rem; color: var(--accent-blue); }
+        .header-title p { font-size: 0.85rem; color: var(--text-muted); }
+
+        .btn-header {
+            background: var(--accent-blue);
+            color: #000;
+            font-weight: 700;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-header:hover { opacity: 0.9; }
+
+        .container { display: flex; max-width: 1400px; margin: 0 auto; padding: 2rem; gap: 2rem; }
+
+        aside { width: 280px; flex-shrink: 0; position: sticky; top: 100px; height: fit-content; }
+        .toc-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.2rem; }
+        .toc-card h3 { font-size: 0.95rem; color: var(--accent-yellow); margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .toc-card ul { list-style: none; }
+        .toc-card li { margin-bottom: 0.6rem; }
+        .toc-card a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; }
+        .toc-card a:hover { color: var(--accent-blue); font-weight: 600; }
+
+        main { flex: 1; }
+        .manual-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            scroll-margin-top: 110px;
+        }
+
+        .manual-section h2 { color: var(--accent-yellow); font-size: 1.3rem; margin-bottom: 1rem; border-bottom: 1px dashed var(--border-color); padding-bottom: 0.5rem; }
+        .manual-section h3 { color: var(--accent-blue); font-size: 1.05rem; margin: 1.2rem 0 0.5rem 0; }
+        .manual-section p, .manual-section li { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .manual-section ul, .manual-section ol { margin-left: 1.2rem; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+        th, td { border: 1px solid var(--border-color); padding: 0.75rem; text-align: left; }
+        th { background: #0f172a; color: var(--accent-blue); }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+        .callout {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--accent-blue);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-size: 0.88rem;
+        }
+
+        @media print {
+            aside, header { display: none; }
+            .container { display: block; padding: 0; }
+            .manual-section { border: 1px solid #ccc; color: #000; background: #fff; page-break-inside: avoid; }
+            .manual-section h2, .manual-section h3 { color: #000; }
+            .manual-section p, .manual-section li { color: #333; }
+            table, th, td { border: 1px solid #000; color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>📖 Manual do Usuário e Diretrizes Pedagógicas — SPAE v2.0</h1>
+            <p>SENAI São José dos Pinhais (PR) • Curso: Assistente de Processos Industriais Integrados</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-header" style="background:var(--accent-green);" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+            <a href="index.html" class="btn-header">⚡ Voltar ao Simulador</a>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <aside>
+            <div class="toc-card">
+                <h3>Sumário do Manual</h3>
+                <ul>
+                    <li><a href="#sec1">1. Apresentação & Metodologia</a></li>
+                    <li><a href="#sec2">2. Arquitetura de Cargos (Níveis I, II, III)</a></li>
+                    <li><a href="#sec3">3. Mapeamento das 18 UCs</a></li>
+                    <li><a href="#sec4">4. Gerador de Projetos Especiais</a></li>
+                    <li><a href="#sec5">5. Guia das Abas e Botões ERP</a></li>
+                    <li><a href="#sec6">6. Ciclo de Aula em 4 Passos</a></li>
+                    <li><a href="#sec7">7. Operação Técnica & Offline</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main>
+
+            <section id="sec1" class="manual-section">
+                <h2>1. Apresentação Geral & Metodologia SENAI</h2>
+                <p>O <strong>Simulador de Práticas Administrativas Empresariais (SPAE v2.0)</strong> é um ambiente educacional controlado, desenvolvido especificamente para atender à matriz curricular <strong>APBG005701/02</strong> do SENAI São José dos Pinhais (PR).</p>
+                <p>O sistema foi concebido sob a <strong>Metodologia SENAI de Educação Profissional</strong>, aplicando os princípios da Aprendizagem Baseada em Projetos (PBL) e da Resolução de Situações-Problema em tempo real.</p>
+                
+                <div class="callout">
+                    🎯 <strong>Objetivo Central:</strong> Permitir que o estudante vivencie a rotina corporativa, compreenda a interdependência entre os setores de uma indústria e desenvolva competências técnicas (*hard skills*) e socioemocionais (*soft skills*).
+                </div>
+
+                <h3>Pilares Pedagógicos da Simulação:</h3>
+                <ul>
+                    <li><strong>Aprendizagem Baseada em Ação:</strong> Os estudantes aplicam conceitos teóricos imediatamente através de lançamentos, aprovações, relatórios e controle de estoque.</li>
+                    <li><strong>Visão Sistêmica Integrada:</strong> Demonstra que falhas ou atrasos em um setor (ex: Compras) causam impactos diretos na Operação e no Faturamento Financeiro.</li>
+                    <li><strong>Erro Construtivo em Ambiente Seguro:</strong> Erros cometidos no sistema não geram prejuízos reais, mas alimentam a análise crítica no *debriefing* ao final da aula.</li>
+                </ul>
+            </section>
+
+            <section id="sec2" class="manual-section">
+                <h2>2. Arquitetura de Cargos e Níveis de Senioridade</h2>
+                <p>Para atender turmas com quantidades variáveis de alunos (ex: 15, 25 ou 35 estudantes) sem gerar ociosidade, o SPAE adota uma estrutura de cargos graduados em três níveis de complexidade:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nível / Função</th>
+                            <th>Escopo de Responsabilidade</th>
+                            <th>Foco de Aprendizagem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Diretoria Geral</strong></td>
+                            <td>Gestão estratégica, autorização final de ordens e análise de indicadores globais do HUD.</td>
+                            <td>Liderança, tomada de decisão e resolução de conflitos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Supervisão de Setor</strong></td>
+                            <td>Coordenação da equipe do setor (RH, Compras, Produção, Qualidade e Financeiro).</td>
+                            <td>Delegação de tarefas, gestão do tempo e controle de prazos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Assistente Admin. III (Avançado)</strong></td>
+                            <td>Tratativa de exceções, cálculo de folha de pagamento, cotações complexas e fluxo de caixa.</td>
+                            <td>Raciocínio analítico, apoio à gestão e mentoria.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Assistente Admin. II (Intermediário)</strong></td>
+                            <td>Conciliação bancária, triagem de seleção, controle de almoxarifado e elaboração de propostas.</td>
+                            <td>Atenção a detalhes, conferência e controle de processos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Assistente Admin. I (Operacional)</strong></td>
+                            <td>Registro de ponto, entrada primária de dados, emissão de recibos e arquivo documental.</td>
+                            <td>Disciplina operacional, cumprimento de normas e digitação.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="sec3" class="manual-section">
+                <h2>3. Mapeamento da Matriz Curricular (As 18 UCs do Curso)</h2>
+                <p>O simulador oferece cobertura integral para as 18 Unidades Curriculares do curso de <em>Assistente de Processos Industriais Integrados</em> (600h):</p>
+
+                <h3>• Unidades Curriculares Básicas (176h):</h3>
+                <ul>
+                    <li><strong>UC 01 — Relações Socioprofissionais, Cidadania e Ética (20h):</strong> Projetos voltados para diversidade, clima organizacional e resolução de conflitos na fábrica.</li>
+                    <li><strong>UC 02 — Fundamentos da Comunicação e Informação (20h):</strong> Redação corporativa, envio de comunicados internos e atas.</li>
+                    <li><strong>UC 03 — Saúde e Segurança do Trabalho - SST (20h):</strong> Adequação às NRs, aquisição de EPIs e mapeamento de riscos operacionais.</li>
+                    <li><strong>UC 04 — Raciocínio Lógico e Análise de Dados (20h):</strong> Organização estatística de dados operacionais e planilhas.</li>
+                    <li><strong>UC 05 — Transformação Digital no Setor Industrial (20h):</strong> Implantação de rotinas *paperless* e aprovações digitais.</li>
+                    <li><strong>UC 06 — Planejamento e Organização do Trabalho (20h):</strong> Aplicação de cronogramas e metodologia Kanban.</li>
+                    <li><strong>UC 07 — Análise de Dados e Informática Aplicada (32h):</strong> Manipulação de sistemas ERP simulados.</li>
+                    <li><strong>UC 08 — Noções de Direito (24h):</strong> Análise de conformidade legal de contratos de fornecimento e CLT.</li>
+                </ul>
+
+                <h3>• UCs Específicas I — Gestão & Apoio Administrativo (144h):</h3>
+                <ul>
+                    <li><strong>UC 09 — Introdução à Gestão Organizacional (24h):</strong> Análise de organogramas e desenho de processos.</li>
+                    <li><strong>UC 10 — Rotinas de Apoio Admin. à Área de RH (40h):</strong> Recrutamento, seleção, controle de ponto e folha de pagamento.</li>
+                    <li><strong>UC 11 — Marketing e Vendas (20h):</strong> Gestão de carteira de clientes (CRM) e propostas comerciais.</li>
+                    <li><strong>UC 12 — Rotinas de Apoio Contábil e Financeiro (40h):</strong> Contas a pagar e receber, conciliação e caixa.</li>
+                    <li><strong>UC 13 — Introdução ao Desenvolvimento de Projetos (20h):</strong> Estruturação de EAP e gerenciamento de escopo.</li>
+                </ul>
+
+                <h3>• UCs Específicas II & III — Qualidade & Logística Integrada (280h):</h3>
+                <ul>
+                    <li><strong>UC 14, 15 e 16 — Qualidade, Ferramentas & Melhoria (120h):</strong> Aplicação de PDCA, Ishikawa, 5S e redução de refugo.</li>
+                    <li><strong>UC 17 — Controle Dimensional (40h):</strong> Auditoria de tolerâncias técnicas no recebimento de materiais.</li>
+                    <li><strong>UC 18 — Logística Integrada (120h):</strong> Recebimento, classificação ABC, armazenagem em almoxarifado e expedição.</li>
+                </ul>
+            </section>
+
+            <section id="sec4" class="manual-section">
+                <h2>4. O Gerador Dinâmico de Projetos Especiais</h2>
+                <p>O painel do Professor (Aba 1) conta com um assistente de modelagem pedagógica. Através dele, o docente pode criar projetos personalizados em 4 etapas:</p>
+                <ol>
+                    <li><strong>Seleção da UC:</strong> O professor escolhe a disciplina que está lecionando no momento.</li>
+                    <li><strong>Definição de Parâmetros:</strong> Insere o Título, o Cenário/Desafio real, o Orçamento disponível e o Prazo em rodadas.</li>
+                    <li><strong>Ajuste & Novas Ideias:</strong> O sistema gera a decomposição de tarefas por setor e permite ao professor inserir exigências livres (ex: *"Exigir cotação em 2 fornecedores"*).</li>
+                    <li><strong>Disparo:</strong> Ao clicar em *Aprovar e Disparar*, o projeto entra na esteira e acende o guia luminoso (GPS Neon) de todos os alunos.</li>
+                </ol>
+            </section>
+
+            <section id="sec5" class="manual-section">
+                <h2>5. Guia Operacional das Abas e Módulos ERP</h2>
+                <ul>
+                    <li><strong>Aba 0 (Agência RH):</strong> Inscrição do aluno, cadastro de contato, escolha de preferência e Quiz de Perfil.</li>
+                    <li><strong>Aba 1 (Mercado / Professor):</strong> Central do docente para aprovar líderes, gerar projetos de UCs e controlar o ritmo da aula.</li>
+                    <li><strong>Aba 2 (Setup RH):</strong> Gerenciamento do quadro de funcionários ativos e distribuição pelos setores.</li>
+                    <li><strong>Aba 3 (Gerência Geral):</strong> Recebe ordens de mercado/projetos e aprova a liberação para Compras.</li>
+                    <li><strong>Aba 4 (Compras / Logística):</strong> Adquire insumos deduzindo do Caixa e envia matérias-primas para a Produção.</li>
+                    <li><strong>Aba 5 (Operação / Produção):</strong> Consome itens do Estoque para transformar requisições em lotes produzidos.</li>
+                    <li><strong>Aba 6 (Qualidade & SLA):</strong> Audita o lote fabril e valida os requisitos antes da liberação comercial.</li>
+                    <li><strong>Aba 7 (Financeiro & Faturamento):</strong> Emite faturas, recolhe o pagamento e credita os recursos no Caixa da empresa.</li>
+                </ul>
+            </section>
+
+            <section id="sec6" class="manual-section">
+                <h2>6. Roteiro Sugerido para Condução da Aula</h2>
+                <p>Para garantir maior engajamento e retenção do conteúdo, recomenda-se organizar a sessão nos 4 passos a seguir:</p>
+                <ol>
+                    <li><strong>Briefing Inicial (10 min):</strong> Apresentação do tema da UC do dia e lançamento do Projeto Especial pelo professor.</li>
+                    <li><strong>Execução na Simulação (60 min):</strong> Alunos trabalham em suas abas, marcando o Ponto e movendo as ordens em cascata.</li>
+                    <li><strong>Fechamento & Passagem de Bastão (10 min):</strong> Conclusão das pendências do dia e atualização do Caixa no HUD.</li>
+                    <li><strong>Debriefing Pedagógico (10 min):</strong> O professor projeta a tela principal e analisa com a turma o indicador SLA, estouros de orçamento e pontos de gargalo.</li>
+                </ol>
+            </section>
+
+            <section id="sec7" class="manual-section">
+                <h2>7. Especificações Técnicas e Funcionamento Offline</h2>
+                <p>O SPAE v2.0 foi arquitetado sob o conceito de **Single File Application (SFA)**. Todas as regras de negócio, interface CSS e algoritmos de sincronização estão contidos no próprio código HTML.</p>
+                <div class="callout">
+                    📡 <strong>Sincronização em Tempo Real:</strong> Utiliza a API nativa `BroadcastChannel` para trocar dados instantaneamente entre navegadores na mesma rede local ou abas do mesmo computador, operando <strong>100% offline</strong> sem depender de servidores Node ou banco de dados externo.
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>

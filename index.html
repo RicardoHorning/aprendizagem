@@ -148,7 +148,6 @@
         }
 
         .job-detail-card { background: #0f172a; border: 1px solid var(--accent-blue); border-radius: 8px; padding: 1rem; margin-top: 0.5rem; }
-        .manual-card { background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.2rem; margin-bottom: 1rem; }
         .uc-project-box { background: #0f172a; border: 1px solid var(--accent-purple); border-radius: 8px; padding: 1rem; margin-top: 1rem; }
     </style>
 </head>
@@ -194,7 +193,7 @@
         <button id="nav-production" class="nav-btn" onclick="switchTab('tab-production')">⚙️ 5. Operação & Produção</button>
         <button id="nav-quality" class="nav-btn" onclick="switchTab('tab-quality')">🔍 6. Qualidade & SLA</button>
         <button id="nav-finance" class="nav-btn" onclick="switchTab('tab-finance')">💰 7. Financeiro & Faturamento</button>
-        <button id="nav-manual" class="nav-btn" onclick="switchTab('tab-manual')" style="border-color:var(--accent-yellow); color:var(--accent-yellow);">📖 8. Manual do Sistema</button>
+        <a href="manual.html" target="_blank" class="nav-btn" style="border-color:var(--accent-yellow); color:var(--accent-yellow); text-decoration:none; display:inline-flex; align-items:center;">📖 Manual Completo</a>
     </nav>
 
     <main>
@@ -291,7 +290,7 @@
             </div>
         </section>
 
-        <!-- 1. CONTROLE DO PROFESSOR & GERADOR DE PROJETOS POR UC -->
+        <!-- 1. CONTROLE DO PROFESSOR -->
         <section id="tab-prof" class="panel">
             <h2>🎛️ Painel do Mercado & Gerador de Projetos Especiais por UC</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Crie e lance desafios temáticos integrados para as 18 Unidades Curriculares da matriz do SENAI.</p>
@@ -339,7 +338,6 @@
                         <button id="btnGeneratePreview" class="btn btn-orange" style="width:100%; margin-top:0.3rem;" onclick="generateProjectPreview()">🪄 Gerar Prévia do Projeto Especial</button>
                     </div>
 
-                    <!-- BOX DE PRÉVIA E REFINAMENTO DO PROFESSOR -->
                     <div id="projectPreviewBox" class="uc-project-box" style="display:none;">
                         <h4 style="color:var(--accent-yellow); margin-bottom:0.5rem;">📋 Prévia das Tarefas Geradas por Setor:</h4>
                         <div id="projTasksPreviewText" style="font-size:0.82rem; color:var(--text-muted); line-height:1.5;"></div>
@@ -440,17 +438,6 @@
         <section id="tab-finance" class="panel">
             <h2>💰 Terminal Financeiro & Faturamento</h2>
             <div id="financeQueue"></div>
-        </section>
-
-        <!-- 8. MANUAL INTEGRADO -->
-        <section id="tab-manual" class="panel">
-            <h2>📖 Manual do SPAE v2.0 — Guia do Professor & Aluno</h2>
-            <div class="manual-card">
-                <h3 style="color:var(--accent-yellow);">1. Projetos Especiais por Unidade Curricular (UC)</h3>
-                <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5; margin-top:0.4rem;">
-                    O formador pode utilizar o gerador na Aba Mercado para lecionar UCs específicas (ex: SST, Qualidade, Logística). O sistema gera desafios com tarefas para todos os setores da empresa, promovendo o aprendizado integrador sem desconstruir a base de dados do ERP.
-                </p>
-            </div>
         </section>
 
     </main>
